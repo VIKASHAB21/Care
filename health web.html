@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthCare Management System</title>
+    
+    <script src="health webjs.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0 ;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #e74c3c;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        body {
+            background-color: var(--light-gray);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 28px;
+            color: var(--primary);
+        }
+        
+        .menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .menu li {
+            margin-left: 20px;
+        }
+        
+        .menu a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .menu a:hover, .menu a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        main {
+            padding: 30px 0;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--dark-gray);
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-change {
+            font-size: 14px;
+            color: var(--success);
+        }
+        
+        .stat-change.negative {
+            color: var(--secondary);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header h2 {
+            font-size: 18px;
+            color: var(--dark-gray);
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: #ddd;
+            color: var(--dark-gray);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #ccc;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            font-weight: 600;
+            color: var(--dark-gray);
+            background-color: #f9f9f9;
+        }
+        
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-scheduled {
+            background-color: #e3f2fd;
+            color: #2196f3;
+        }
+        
+        .status-completed {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        .status-cancelled {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+        
+        .status-pending {
+            background-color: #fff8e1;
+            color: #ffc107;
+        }
+        
+        .status-active {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        .status-expired {
+            background-color: #f5f5f5;
+            color: #9e9e9e;
+        }
+        
+        .patient-search {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .patient-search input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+        }
+        
+        .patient-search button {
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            max-width: 800px;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            min-width: 10px;
+            padding: 3px 7px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            background-color: var(--primary);
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+        
+        .prescription-list {
+            margin-top: 20px;
+        }
+        
+        .prescription-item {
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .prescription-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .prescription-details {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+        }
+        
+        .prescription-medication {
+            margin-bottom: 8px;
+            padding-left: 10px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .prescription-notes {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                    </div>
+                    Health<span>Care</span>
+                </div>
+                <ul class="menu">
+                    <li><a href="#" class="active">Dashboard</a></li>
+                    <li><a href="#">Patients</a></li>
+                    <li><a href="#">Appointments</a></li>
+                    <li><a href="#">Prescriptions</a></li>
+                    <li><a href="#">Doctors</a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="#">Settings</a></li>
+                </ul>
+                <div class="user-profile">
+                    <img src="/api/placeholder/40/40" alt="User Profile">
+                    <span>Dr. John Smith</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="dashboard">
+                <div class="stat-card">
+                    <h3>Total Patients</h3>
+                    <div class="stat-value">1,248</div>
+                    <div class="stat-change">+12% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Appointments Today</h3>
+                    <div class="stat-value">24</div>
+                    <div class="stat-change">+3 from yesterday</div>
+                </div>
+                <div class="stat-card">
+                    <h3>New Patients</h3>
+                    <div class="stat-value">48</div>
+                    <div class="stat-change">+8% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Prescriptions</h3>
+                    <div class="stat-value">186</div>
+                    <div class="stat-change">+5% from last month</div>
+                </div>
+            </div>
+
+            <div class="grid-layout">
+                <div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Upcoming Appointments</h2>
+                            <button class="btn btn-primary">Add New</button>
+                        </div>
+                        <div class="card-body">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Time</th>
+                                        <th>Purpose</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Sarah Johnson</td>
+                                        <td>09:00 AM</td>
+                                        <td>General Checkup</td>
+                                        <td><span class="status status-scheduled">Scheduled</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary">Details</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Michael Brown</td>
+                                        <td>10:30 AM</td>
+                                        <td>Follow-up</td>
+                                        <td><span class="status status-scheduled">Scheduled</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary">Details</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Robert Wilson</td>
+                                        <td>11:15 AM</td>
+                                        <td>Lab Results</td>
+                                        <td><span class="status status-pending">Pending</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary">Details</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Emily Davis</td>
+                                        <td>02:00 PM</td>
+                                        <td>Vaccination</td>
+                                        <td><span class="status status-scheduled">Scheduled</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary">Details</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>James Moore</td>
+                                        <td>03:45 PM</td>
+                                        <td>Consultation</td>
+                                        <td><span class="status status-scheduled">Scheduled</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary">Details</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Patient Records</h2>
+                            <div class="patient-search">
+                                <input type="text" placeholder="Search patients...">
+                                <button class="btn btn-primary">Search</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>ID</th>
+                                        <th>Last Visit</th>
+                                        <th>Prescriptions</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Jennifer Smith</td>
+                                        <td>PT-7823</td>
+                                        <td>Mar 05, 2025</td>
+                                        <td>
+                                            <span class="status status-active">Active</span>
+                                            <span class="badge">3</span>
+                                        </td>
+                                        <td class="action-buttons">
+                                            <button class="btn btn-success">View</button>
+                                            <button class="btn btn-primary rx-btn" data-patient="Jennifer Smith" data-id="PT-7823">Prescriptions</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Thomas Anderson</td>
+                                        <td>PT-7824</td>
+                                        <td>Mar 04, 2025</td>
+                                        <td>
+                                            <span class="status status-active">Active</span>
+                                            <span class="badge">1</span>
+                                        </td>
+                                        <td class="action-buttons">
+                                            <button class="btn btn-success">View</button>
+                                            <button class="btn btn-primary rx-btn" data-patient="Thomas Anderson" data-id="PT-7824">Prescriptions</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jessica Williams</td>
+                                        <td>PT-7825</td>
+                                        <td>Mar 04, 2025</td>
+                                        <td>
+                                            <span class="status status-expired">Expired</span>
+                                            <span class="badge">2</span>
+                                        </td>
+                                        <td class="action-buttons">
+                                            <button class="btn btn-success">View</button>
+                                            <button class="btn btn-primary rx-btn" data-patient="Jessica Williams" data-id="PT-7825">Prescriptions</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>David Miller</td>
+                                        <td>PT-7826</td>
+                                        <td>Mar 03, 2025</td>
+                                        <td>
+                                            <span class="status status-active">Active</span>
+                                            <span class="badge">2</span>
+                                        </td>
+                                        <td class="action-buttons">
+                                            <button class="btn btn-success">View</button>
+                                            <button class="btn btn-primary rx-btn" data-patient="David Miller" data-id="PT-7826">Prescriptions</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Today's Schedule</h2>
+                        </div>
+                        <div class="card-body">
+                            <div style="padding: 10px; margin-bottom: 10px; border-left: 4px solid var(--primary); background-color: #f9f9f9;">
+                                <div style="font-weight: bold;">09:00 AM - 09:30 AM</div>
+                                <div>Sarah Johnson - General Checkup</div>
+                            </div>
+                            <div style="padding: 10px; margin-bottom: 10px; border-left: 4px solid var(--primary); background-color: #f9f9f9;">
+                                <div style="font-weight: bold;">10:30 AM - 11:00 AM</div>
+                                <div>Michael Brown - Follow-up</div>
+                            </div>
+                            <div style="padding: 10px; margin-bottom: 10px; border-left: 4px solid var(--warning); background-color: #f9f9f9;">
+                                <div style="font-weight: bold;">11:15 AM - 11:45 AM</div>
+                                <div>Robert Wilson - Lab Results</div>
+                            </div>
+                            <div style="padding: 10px; margin-bottom: 10px; border-left: 4px solid var(--primary); background-color: #f9f9f9;">
+                                <div style="font-weight: bold;">02:00 PM - 02:30 PM</div>
+                                <div>Emily Davis - Vaccination</div>
+                            </div>
+                            <div style="padding: 10px; margin-bottom: 10px; border-left: 4px solid var(--primary); background-color: #f9f9f9;">
+                                <div style="font-weight: bold;">03:45 PM - 04:30 PM</div>
+                                <div>James Moore - Consultation</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Recent Notifications</h2>
+                        </div>
+                        <div class="card-body">
+                            <div style="padding: 10px; margin-bottom: 10px; border-radius: 4px; background-color: #e8f5e9;">
+                                <div style="font-weight: bold;">New Prescription</div>
+                                <div>Prescribed Amoxicillin for Jennifer Smith</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">15 mins ago</div>
+                            </div>
+                            <div style="padding: 10px; margin-bottom: 10px; border-radius: 4px; background-color: #e8f5e9;">
+                                <div style="font-weight: bold;">New Appointment</div>
+                                <div>Emily Davis scheduled for 2:00 PM today</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">30 mins ago</div>
+                            </div>
+                            <div style="padding: 10px; margin-bottom: 10px; border-radius: 4px; background-color: #fff8e1;">
+                                <div style="font-weight: bold;">Lab Results</div>
+                                <div>Robert Wilson's blood work results are ready</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">1 hour ago</div>
+                            </div>
+                            <div style="padding: 10px; margin-bottom: 10px; border-radius: 4px; background-color: #ffebee;">
+                                <div style="font-weight: bold;">Prescription Expiring</div>
+                                <div>Thomas Anderson's Lisinopril prescription expires tomorrow</div>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;">1.5 hours ago</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Prescription Overview</h2>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                <div style="text-align: center; padding: 10px; background-color: #e3f2fd; border-radius: 6px; flex: 1; margin-right: 10px;">
+                                    <div style="font-size: 24px; font-weight: bold;">186</div>
+                                    <div>Active</div>
+                                </div>
+                                <div style="text-align: center; padding: 10px; background-color: #fff8e1; border-radius: 6px; flex: 1; margin-right: 10px;">
+                                    <div style="font-size: 24px; font-weight: bold;">12</div>
+                                    <div>Expiring Soon</div>
+                                </div>
+                                <div style="text-align: center; padding: 10px; background-color: #f5f5f5; border-radius: 6px; flex: 1;">
+                                    <div style="font-size: 24px; font-weight: bold;">45</div>
+                                    <div>Expired</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%;">Manage All Prescriptions</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Visit Frequency</th>
+                <th>Current Health Issue</th>
+                <th>Genetic Conditions</th>
+                <th>Last Visit</th>
+                <th>Prescriptions</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Jennifer Smith</td>
+                <td>PT-7823</td>
+                <td>Bi-weekly</td>
+                <td>Hypertension</td>
+                <td>Diabetes Type 2</td>
+                <td>Mar 05, 2025</td>
+                <td>
+                    <span class="status status-active">Active</span>
+                    <span class="badge">3</span>
+                </td>
+                <td class="action-buttons">
+                    <button class="btn btn-success">View</button>
+                    <button class="btn btn-primary rx-btn" data-patient="Jennifer Smith" data-id="PT-7823">Prescriptions</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Thomas Anderson</td>
+                <td>PT-7824</td>
+                <td>Monthly</td>
+                <td>Asthma</td>
+                <td>None</td>
+                <td>Mar 04, 2025</td>
+                <td>
+                    <span class="status status-active">Active</span>
+                    <span class="badge">1</span>
+                </td>
+                <td class="action-buttons">
+                    <button class="btn btn-success">View</button>
+                    <button class="btn btn-primary rx-btn" data-patient="Thomas Anderson" data-id="PT-7824">Prescriptions</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Jessica Williams</td>
+                <td>PT-7825</td>
+                <td>Quarterly</td>
+                <td>Migraines</td>
+                <td>Familial Hypercholesterolemia</td>
+                <td>Mar 04, 2025</td>
+                <td>
+                    <span class="status status-expired">Expired</span>
+                    <span class="badge">2</span>
+                </td>
+                <td class="action-buttons">
+                    <button class="btn btn-success">View</button>
+                    <button class="btn btn-primary rx-btn" data-patient="Jessica Williams" data-id="PT-7825">Prescriptions</button>
+                </td>
+            </tr>
+            <tr>
+                <td>David Miller</td>
+                <td>PT-7826</td>
+                <td>Weekly</td>
+                <td>Post-surgery recovery</td>
+                <td>Heart disease</td>
+                <td>Mar 03, 2025</td>
+                <td>
+                    <span class="status status-active">Active</span>
+                    <span class="badge">2</span>
+                </td>
+                <td class="action-buttons">
+                    <button class="btn btn-success">View</button>
+                    <button class="btn btn-primary rx-btn" data-patient="David Miller" data-id="PT-7826">Prescriptions</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Prescription Modal -->
+    <div id="prescriptionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Patient Prescriptions</h2>
+                <p id="patient-info">Patient: <span id="patient-name"></span> (ID: <span id="patient-id"></span>)</p>
+            </div>
+            <div class="prescription-list" id="prescription-list">
+                <!-- Prescription items will be inserted here dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="close-modal">Close</button>
+                <button class="btn btn-primary" id="add-prescription">Add New Prescription</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample prescription data
+            const prescriptionData = {
+                "PT-7823": [
+                    {
+                        id: "RX-10045",
+                        medication: "Amoxicillin 500mg",
+                        dosage: "1 capsule 3 times daily",
+                        startDate: "Mar 05, 2025",
+                        endDate: "Mar 19, 2025",
+                        status: "active",
+                        notes: "Take with food. Complete entire course of antibiotics.",
+                        prescribedBy: "Dr. John Smith"
+                    },
+                    {
+                        id: "RX-10046",
+                        medication: "Ibuprofen 400mg",
+                        dosage: "1 tablet every 6 hours as needed for pain",
+                        startDate: "Mar 05, 2025",
+                        endDate: "Mar 12, 2025",
+                        status: "active",
+                        notes: "Take with food or milk to reduce stomach irritation.",
+                        prescribedBy: "Dr. John Smith"
+                    },
+                    {
+                        id: "RX-9876",
+                        medication: "Lisinopril 10mg",
+                        dosage: "1 tablet daily",
+                        startDate: "Jan 15, 2025",
+                        endDate: "Jul 15, 2025",
+                        status: "active",
+                        notes: "Take in the morning. Monitor blood pressure regularly.",
+                        prescribedBy: "Dr. Sarah Williams"
+                    }
+                ],
+                "PT-7824": [
+                    {
+                        id: "RX-10030",
+                        medication: "Lisinopril 20mg",
+                        dosage: "1 tablet daily in the morning",
+                        startDate: "Feb 20, 2025",
+                        endDate: "Mar 07, 2025",
+                        status: "active",
+                        notes: "Blood pressure medication. Report any dizziness or coughing.",
+                        prescribedBy: "Dr. John Smith"
+                    }
+                ],
+                "PT-7825": [
+                    {
+                        id: "RX-9950",
+                        medication: "Metformin 500mg",
+                        dosage: "1 tablet twice daily with meals",
+                        startDate: "Feb 15, 2025",
+                        endDate: "Mar 01, 2025",
+                        status: "expired",
+                        notes: "For type 2 diabetes. May cause stomach upset initially.",
+                        prescribedBy: "Dr. Emily Rodriguez"
+                    },
+                    {
+                        id: "RX-9951",
+                        medication: "Simvastatin 20mg",
+                        dosage: "1 tablet daily at bedtime",
+                        startDate: "Feb 15, 2025",
+                        endDate: "Feb 28, 2025",
+                        status: "expired",
+                        notes: "For cholesterol. Avoid grapefruit juice.",
+                        prescribedBy: "Dr. Emily Rodriguez"
+                    }
+                ],
+                "PT-7826": [
+                    {
+                        id: "RX-10010",
+                        medication: "Atorvastatin 10mg",
+                        dosage: "1 tablet daily at bedtime",
+                        startDate: "Mar 03, 2025",
+                        endDate: "Sep 03, 2025",
+                        status: "active",
+                        notes: "For cholesterol management. Take at the same time each day.",
+                        prescribedBy: "Dr. John Smith"
+                    },
+                    {
+                        id: "RX-10011",
+                        medication: "Aspirin 81mg",
+                        dosage: "1 tablet daily",
+                        startDate: "Mar 03, 2025",
+                        endDate: "Mar 03, 2026",
+                        status: "active",
+                        notes: "Blood thinner. Avoid taking with other NSAIDs without consulting doctor.",
+                        prescribedBy: "Dr. John Smith"
+                    }
+                ]
+            };
+
+            // Modal elements
+            const modal = document.getElementById("prescriptionModal");
+            const prescriptionList = document.getElementById("prescription-list");
+            const patientName = document.getElementById("patient-name");
+            const patientId = document.getElementById("patient-id");
+            const closeModalBtn = document.getElementById("close-modal");
+            const closeBtn = document.querySelector(".close");
+        })
+    </script>
+    
+    <script>// Patient data store
+        const patients = [
+            {
+                id: "PT-7823",
+                name: "Sanjay",
+                lastVisit: "Mar 05, 2025",
+                prescriptions: [
+                    {
+                        id: "RX-12345",
+                        medication: "Amoxicillin 500mg",
+                        dosage: "1 tablet three times daily with meals",
+                        startDate: "Mar 05, 2025",
+                        endDate: "Mar 19, 2025",
+                        notes: "Take full course even if symptoms improve",
+                        status: "active"
+                    },
+                    {
+                        id: "RX-12346",
+                        medication: "Ibuprofen 400mg",
+                        dosage: "1 tablet every 6 hours as needed for pain",
+                        startDate: "Mar 05, 2025",
+                        endDate: "Mar 12, 2025",
+                        notes: "Take with food to minimize stomach irritation",
+                        status: "active"
+                    },
+                    {
+                        id: "RX-12347",
+                        medication: "Loratadine 10mg",
+                        dosage: "1 tablet daily",
+                        startDate: "Mar 05, 2025",
+                        endDate: "Apr 05, 2025",
+                        notes: "For seasonal allergies",
+                        status: "active"
+                    }
+                ]
+            },
+            {
+                id: "PT-7824",
+                name: "Thomas Anderson",
+                lastVisit: "Mar 04, 2025",
+                prescriptions: [
+                    {
+                        id: "RX-12348",
+                        medication: "Lisinopril 10mg",
+                        dosage: "1 tablet daily in the morning",
+                        startDate: "Mar 04, 2025",
+                        endDate: "Jun 04, 2025",
+                        notes: "For blood pressure control. Monitor BP weekly.",
+                        status: "active"
+                    }
+                ]
+            },
+            {
+                id: "PT-7825",
+                name: "Jessica Williams",
+                lastVisit: "Mar 04, 2025",
+                prescriptions: [
+                    {
+                        id: "RX-12349",
+                        medication: "Metformin 500mg",
+                        dosage: "1 tablet twice daily with meals",
+                        startDate: "Jan 04, 2025",
+                        endDate: "Mar 04, 2025",
+                        notes: "For blood sugar control",
+                        status: "expired"
+                    },
+                    {
+                        id: "RX-12350",
+                        medication: "Atorvastatin 20mg",
+                        dosage: "1 tablet daily at bedtime",
+                        startDate: "Jan 04, 2025",
+                        endDate: "Mar 04, 2025",
+                        notes: "For cholesterol management",
+                        status: "expired"
+                    }
+                ]
+            },
+            {
+                id: "PT-7826",
+                name: "David Miller",
+                lastVisit: "Mar 03, 2025",
+                prescriptions: [
+                    {
+                        id: "RX-12351",
+                        medication: "Levothyroxine 50mcg",
+                        dosage: "1 tablet daily on empty stomach",
+                        startDate: "Mar 03, 2025",
+                        endDate: "Sep 03, 2025",
+                        notes: "Take 30-60 minutes before breakfast",
+                        status: "active"
+                    },
+                    {
+                        id: "RX-12352",
+                        medication: "Vitamin D3 2000IU",
+                        dosage: "1 tablet daily with food",
+                        startDate: "Mar 03, 2025",
+                        endDate: "Sep 03, 2025",
+                        notes: "Supplement for vitamin D deficiency",
+                        status: "active"
+                    }
+                ]
+            },
+            {
+                id: "PT-7827",
+                name: "Sarah Johnson",
+                lastVisit: "Mar 01, 2025",
+                prescriptions: [
+                    {
+                        id: "RX-12353",
+                        medication: "Cetirizine 10mg",
+                        dosage: "1 tablet daily",
+                        startDate: "Mar 01, 2025",
+                        endDate: "Apr 01, 2025",
+                        notes: "For allergic rhinitis",
+                        status: "active"
+                    }
+                ]
+            },
+            {
+                id: "PT-7828",
+                name: "Michael Brown",
+                lastVisit: "Mar 01, 2025",
+                prescriptions: [
+                    {
+                        id: "RX-12354",
+                        medication: "Omeprazole 20mg",
+                        dosage: "1 capsule daily before breakfast",
+                        startDate: "Mar 01, 2025",
+                        endDate: "Mar 30, 2025",
+                        notes: "For acid reflux. Avoid spicy foods.",
+                        status: "active"
+                    },
+                    {
+                        id: "RX-12355",
+                        medication: "Amlodipine 5mg",
+                        dosage: "1 tablet daily",
+                        startDate: "Mar 01, 2025",
+                        endDate: "Aug 30, 2025",
+                        notes: "For hypertension",
+                        status: "active"
+                    }
+                ]
+            }
+        ];
+        
+        // DOM elements
+        const searchInput = document.querySelector('.patient-search input');
+        const searchButton = document.querySelector('.patient-search button');
+        const patientTable = document.querySelector('.card:nth-of-type(2) tbody');
+        const prescriptionModal = document.getElementById('prescription-modal');
+        const prescriptionButtons = document.querySelectorAll('.rx-btn');
+        const closeModalButton = document.querySelector('.close');
+        
+        // Initialize the modal if it doesn't exist yet
+        if (!prescriptionModal) {
+            // Create the modal
+            const modalHtml = `
+                <div id="prescription-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Patient Prescriptions</h2>
+                            <span class="close">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="patient-info">
+                                <h3 id="modal-patient-name"></h3>
+                                <p>Patient ID: <span id="modal-patient-id"></span></p>
+                            </div>
+                            
+                            <div class="rx-overview">
+                                <div class="rx-stat rx-stat-active">
+                                    <div>Active</div>
+                                    <div class="rx-stat-value" id="active-count">0</div>
+                                </div>
+                                <div class="rx-stat rx-stat-expiring">
+                                    <div>Expiring Soon</div>
+                                    <div class="rx-stat-value" id="expiring-count">0</div>
+                                </div>
+                                <div class="rx-stat rx-stat-expired">
+                                    <div>Expired</div>
+                                    <div class="rx-stat-value" id="expired-count">0</div>
+                                </div>
+                            </div>
+                            
+                            <div class="prescription-list" id="prescription-list">
+                                <!-- Prescriptions will be populated here -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" id="close-modal">Close</button>
+                            <button class="btn btn-primary" id="add-prescription">Add New Prescription</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            
+            // Re-query the elements now that they exist
+            prescriptionModal = document.getElementById('prescription-modal');
+            closeModalButton = document.querySelector('.close');
+            
+            // Add event listener to the close button
+            document.getElementById('close-modal').addEventListener('click', () => {
+                prescriptionModal.style.display = "none";
+            });
+        }
+        
+        // Search functionality
+        function setupSearch() {
+            // Search button click handler
+            searchButton.addEventListener('click', performSearch);
+            
+            // Enter key press in search input
+            searchInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            
+            if (searchTerm === '') {
+                // If search is empty, show default patients
+                renderPatientTable(patients.slice(0, 4));
+                return;
+            }
+            
+            // Filter patients based on search term
+            const filteredPatients = patients.filter(patient => 
+                patient.name.toLowerCase().includes(searchTerm) || 
+                patient.id.toLowerCase().includes(searchTerm)
+            );
+            
+            // Render filtered results
+            renderPatientTable(filteredPatients);
+        }
+        
+        // Render patient table with filtered results
+        function renderPatientTable(patientsToDisplay) {
+            // Clear current table
+            patientTable.innerHTML = '';
+            
+            if (patientsToDisplay.length === 0) {
+                // No results found
+                const noResultsRow = document.createElement('tr');
+                noResultsRow.innerHTML = `
+                    <td colspan="5" style="text-align: center; padding: 20px;">
+                        No patients found matching your search.
+                    </td>
+                `;
+                patientTable.appendChild(noResultsRow);
+                return;
+            }
+            
+            // Add patients to table
+            patientsToDisplay.forEach(patient => {
+                const activeRx = patient.prescriptions.filter(p => p.status === 'active').length;
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${patient.name}</td>
+                    <td>${patient.id}</td>
+                    <td>${patient.lastVisit}</td>
+                    <td>
+                        <span class="status ${activeRx > 0 ? 'status-active' : 'status-expired'}">
+                            ${activeRx > 0 ? 'Active' : 'Expired'}
+                        </span>
+                        <span class="badge">${patient.prescriptions.length}</span>
+                    </td>
+                    <td class="action-buttons">
+                        <button class="btn btn-success">View</button>
+                        <button class="btn btn-primary rx-btn" data-patient="${patient.name}" data-id="${patient.id}">Prescriptions</button>
+                    </td>
+                `;
+                
+                patientTable.appendChild(row);
+            });
+            
+            // Add event listeners to the new prescription buttons
+            setupPrescriptionButtons();
+        }
+        
+        // Setup prescription modal buttons
+        function setupPrescriptionButtons() {
+            document.querySelectorAll('.rx-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const patientId = this.getAttribute('data-id');
+                    const patientName = this.getAttribute('data-patient');
+                    
+                    // Find the patient
+                    const patient = patients.find(p => p.id === patientId);
+                    
+                    if (patient) {
+                        showPrescriptionModal(patient);
+                    }
+                });
+            });
+        }
+        
+        // Show prescription modal
+        function showPrescriptionModal(patient) {
+            // Set patient information
+            document.getElementById('modal-patient-name').textContent = patient.name;
+            document.getElementById('modal-patient-id').textContent = patient.id;
+            
+            // Count prescriptions by status
+            const activeCount = patient.prescriptions.filter(p => p.status === 'active').length;
+            const expiredCount = patient.prescriptions.filter(p => p.status === 'expired').length;
+            
+            // Calculate expiring soon (prescriptions expiring in next 7 days)
+            const today = new Date();
+            const nextWeek = new Date();
+            nextWeek.setDate(today.getDate() + 7);
+            
+            const expiringCount = patient.prescriptions.filter(p => {
+                if (p.status !== 'active') return false;
+                const endDate = new Date(p.endDate);
+                return endDate > today && endDate <= nextWeek;
+            }).length;
+            
+            // Update counts
+            document.getElementById('active-count').textContent = activeCount;
+            document.getElementById('expiring-count').textContent = expiringCount;
+            document.getElementById('expired-count').textContent = expiredCount;
+            
+            // Populate prescription list
+            const prescriptionList = document.getElementById('prescription-list');
+            prescriptionList.innerHTML = '';
+            
+            if (patient.prescriptions.length === 0) {
+                prescriptionList.innerHTML = '<p>No prescriptions found for this patient.</p>';
+            } else {
+                patient.prescriptions.forEach(prescription => {
+                    const prescriptionItem = document.createElement('div');
+                    prescriptionItem.className = 'prescription-item';
+                    
+                    prescriptionItem.innerHTML = `
+                        <div class="prescription-title">
+                            <div>${prescription.medication}</div>
+                            <span class="status ${prescription.status === 'active' ? 'status-active' : 'status-expired'}">
+                                ${prescription.status === 'active' ? 'Active' : 'Expired'}
+                            </span>
+                        </div>
+                        <div class="prescription-details">
+                            <div class="prescription-medication">
+                                <div><strong>Dosage:</strong> ${prescription.dosage}</div>
+                                <div><strong>Date Range:</strong> ${prescription.startDate} - ${prescription.endDate}</div>
+                            </div>
+                            <div class="prescription-notes">
+                                <strong>Notes:</strong> ${prescription.notes}
+                            </div>
+                        </div>
+                    `;
+                    
+                    prescriptionList.appendChild(prescriptionItem);
+                });
+            }
+            
+            // Show the modal
+            prescriptionModal.style.display = 'block';
+        }
+        
+        // Close the modal when clicking the close button
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('close') || event.target.id === 'close-modal') {
+                prescriptionModal.style.display = 'none';
+            }
+        });
+        
+        // Close when clicking outside the modal
+        window.addEventListener('click', function(event) {
+            if (event.target === prescriptionModal) {
+                prescriptionModal.style.display = 'none';
+            }
+        });
+        
+        // Add New Prescription button functionality
+        document.addEventListener('click', function(event) {
+            if (event.target.id === 'add-prescription') {
+                alert('This feature is currently in development. You will be able to add new prescriptions soon.');
+            }
+        });
+        
+        // Initialize the functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            setupSearch();
+            setupPrescriptionButtons();
+        });
+        
+        // Call setup functions immediately in case DOM is already loaded
+        setupSearch();
+        setupPrescriptionButtons();
+        </script>
+  
+    
+        
